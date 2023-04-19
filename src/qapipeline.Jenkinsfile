@@ -1,25 +1,22 @@
 pipeline {
-echo"Start of pipeline......."
- agent any
+    agent any
+    environment {
+        QA_JOB_ENDPOINT = "http://staging-build.acko.in/job/Test_Renewal_Revamp/"
+        JENKINS_DEV_TOKEN = "MTFiMWY5YzFlOWRmNWZiMGU2MmIyMjg3ZTZjNjViMjgwMg=="
+    }
     stages {
-    echo "Under Stages....."
-            stage('Run Tests') {
-            echo "Under Stage....."
-                parallel {
-                echo "Under parallel....."
-                   stage('Master_Service_Pincode_Test') {
-                       steps{
-                       echo "Under pincode....."
-//                         build job: 'Master_Service_Pincode_Test'
-                       }
-                    }
-                   stage("Renewal Revamp") {
-                       steps{
-                       echo "Under revamp....."
-//                            build job: "Test_Renewal_Revamp"
-                       }
-                   }
-                 }
+        stage ('Run test') {
+            agent {
+                label 'master'
             }
+            parallel {
+              stage("Test_Renewal_Revamp") {
+              build: "Test_Renewal_Revamp"
+              }
+            }
+            steps{
+                sh "curl --silent -X POST ${QA_JOB_ENDPOINT}/buildWithParameters --header 'Authorization: Basic ${JENKINS_DEV_TOKEN }"
+            }
+        }
     }
 }
