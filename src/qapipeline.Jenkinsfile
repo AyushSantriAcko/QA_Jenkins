@@ -13,7 +13,7 @@ pipeline {
             steps{
                 echo "Steps"
                  script {
-                      def handle = triggerRemoteJob job: "${QA_JOB_ENDPOINT}", auth: CredentialsAuth(credentials: 'MTFiMWY5YzFlOWRmNWZiMGU2MmIyMjg3ZTZjNjViMjgwMg=='), shouldNotFailBuild: true
+                      def handle = triggerRemoteJob job: "${QA_JOB_ENDPOINT}", auth: CredentialsAuth(credentials: 'JENKINS_QA_API_TOKEN'), shouldNotFailBuild: true
                       BUILDSTATUS = handle.getBuildResult().toString()
                       echo BUILDSTATUS;
                       if (BUILDSTATUS == "FAILURE") {
