@@ -1,4 +1,5 @@
 pipeline {
+echo"Start of pipeline......."
  agent any
     stages {
     echo "Under Stages....."
