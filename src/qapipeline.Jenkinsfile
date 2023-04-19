@@ -6,9 +6,12 @@ pipeline {
     }
     stages {
         stage ('Run test') {
+            agent {
+                label 'master'
+            }
             parallel {
               stage("Test_Renewal_Revamp") {
-              build: "Test_Renewal_Revamp"
+              build: Test_Renewal_Revamp
               }
             }
             steps{
