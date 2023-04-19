@@ -9,11 +9,12 @@ pipeline {
             agent {
                 label 'master'
             }
-            parallel {
-              stage("Test_Renewal_Revamp") {
-              build: Test_Renewal_Revamp
-              }
-            }
+            build : "Test_Renewal_Revamp"
+//             parallel {
+//               stage("Test_Renewal_Revamp") {
+//               build: Test_Renewal_Revamp
+//               }
+//             }
             steps{
                 sh "curl --silent -X POST ${QA_JOB_ENDPOINT}/buildWithParameters --header 'Authorization: Basic ${JENKINS_DEV_TOKEN }"
             }
