@@ -8,10 +8,10 @@ pipeline {
     stages {
         stage ('Run test') {
             parallel {
-                agent {
-                    label 'master'
-                }
                 stage("Test_Renewal_Revamp") {
+                    agent {
+                        label 'master'
+                    }
                     steps{
                         echo "Steps"
                         script {
