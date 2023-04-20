@@ -7,19 +7,23 @@ pipeline {
     }
     stages {
         stage ('Run test') {
-            agent {
-                label 'master'
-            }
-            steps{
-                echo "Steps"
-                 script {
-                      def handle = triggerRemoteJob job: "${QA_JOB_ENDPOINT}", auth: CredentialsAuth(credentials: 'JENKINS_QA_API_TOKEN'), shouldNotFailBuild: true
-                      BUILDSTATUS = handle.getBuildResult().toString()
-                      echo BUILDSTATUS;
-                      if (BUILDSTATUS == "FAILURE") {
-                          error('Test job failure')
-                      }
-                 }
+            parallel {
+                agent {
+                    label 'master'
+                }
+                stage("Test_Renewal_Revamp") {
+                    steps{
+                        echo "Steps"
+                        script {
+                            def handle = triggerRemoteJob job: "${QA_JOB_ENDPOINT}", auth: CredentialsAuth(credentials: 'JENKINS_QA_API_TOKEN'), shouldNotFailBuild: true
+                            BUILDSTATUS = handle.getBuildResult().toString()
+                            echo BUILDSTATUS;
+                            if (BUILDSTATUS == "FAILURE") {
+                               error('Test job failure')
+                            }
+                        }
+                    }
+                }
             }
 
         }
