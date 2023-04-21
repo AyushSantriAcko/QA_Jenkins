@@ -5,20 +5,23 @@ pipeline {
         QA_PINCODE_ENDPOINT = "http://staging-build.acko.in/job/Master_Service_Pincode_Test/"
         MASTER_SERVICE_RENEWAL_TEST = "http://staging-build.acko.in/job/Master_Service_Renewal_Test/"
         MASTER_SERVICE_VARIANT_TEST = "http://staging-build.acko.in/job/Master_Service_Variant_Test/"
+        RULE_ENGINE_ROI_NEWCAR = "http://172.31.42.16:8080/view/Pricing/job/ruleEngine_ROI_NewCar_GoodAndBadRoi/"
+        AUTO_PRICING = "http://172.31.42.16:8080/view/Pricing/job/Auto-Pricing/"
+        OLA_ELECTRIC = "http://172.31.42.16:8080/view/Pricing/job/olaElectric_Find_Failed_Pincodes/"
         JENKINS_DEV_TOKEN = "MTFiMWY5YzFlOWRmNWZiMGU2MmIyMjg3ZTZjNjViMjgwMg=="
         BUILDSTATUS = "FAILURE"
     }
     stages {
         stage ('Run test') {
             parallel {
-                stage("MASTER_SERVICE_VARIANT_TEST") {
+                stage("ruleEngine_ROI_NewCar_GoodAndBadRoi") {
                     agent {
                         label 'master'
                     }
                     steps{
                         echo "Steps"
                         script {
-                            def handle = triggerRemoteJob job: "${MASTER_SERVICE_VARIANT_TEST}", auth: CredentialsAuth(credentials: 'JENKINS_QA_API_TOKEN'), shouldNotFailBuild: true
+                            def handle = triggerRemoteJob job: "${RULE_ENGINE_ROI_NEWCAR}", auth: CredentialsAuth(credentials: 'JENKINS_QA_API_TOKEN'), shouldNotFailBuild: true
                             BUILDSTATUS = handle.getBuildResult().toString()
                             echo BUILDSTATUS;
                             if (BUILDSTATUS == "FAILURE") {
@@ -27,14 +30,14 @@ pipeline {
                         }
                     }
                 }
-                stage("Master Service Pincode") {
+                stage("Auto-Pricing") {
                     agent {
                         label 'master'
                     }
                     steps{
                         echo "Steps"
                         script {
-                            def handle = triggerRemoteJob job: "${QA_PINCODE_ENDPOINT}", auth: CredentialsAuth(credentials: 'JENKINS_QA_API_TOKEN'), shouldNotFailBuild: true
+                            def handle = triggerRemoteJob job: "${AUTO_PRICING}", auth: CredentialsAuth(credentials: 'JENKINS_QA_API_TOKEN'), shouldNotFailBuild: true
                             BUILDSTATUS = handle.getBuildResult().toString()
                             echo BUILDSTATUS;
                             if (BUILDSTATUS == "FAILURE") {
@@ -43,7 +46,7 @@ pipeline {
                         }
                     }
                 }
-                stage("MASTER_SERVICE_RENEWAL_TEST") {
+                stage("olaElectric_Find_Failed_Pincodes") {
                     agent {
                         label 'master'
                     }
